@@ -19,7 +19,7 @@ def get_movies_from_cosine_similarities(all_cosine_similarities, target_user_id 
         movies_from_closest_user = movies_from_closest_user[movies_from_closest_user >= 4]
         # movies_from_closest_user = movies_from_closest_user.sort_values()
         movies_from_closest_user = movies_from_closest_user[user_movies.notna()]
-        print(movies_from_closest_user)
+        # print(movies_from_closest_user)
         curated_movies = movies_from_closest_user[~movies_from_closest_user.index.isin(seen)]
         seen.update(curated_movies.index)
         if all_curated_movies_ratings is None:
@@ -29,7 +29,7 @@ def get_movies_from_cosine_similarities(all_cosine_similarities, target_user_id 
         # print(curated_movies)
         index+=1
     all_curated_movies_ratings = all_curated_movies_ratings.sort_values(ascending=False).index
-    print(all_curated_movies_ratings)
+    # print(all_curated_movies_ratings)
     all_curated_movies = movies.set_index("movieId").loc[all_curated_movies_ratings].reset_index()
     print(all_curated_movies)
     return
