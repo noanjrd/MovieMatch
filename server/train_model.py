@@ -2,6 +2,12 @@ import pandas as pd
 import numpy as np
 import sys
 
+def return_tmdb(movie_ids):
+    tmdb_links = pd.read_csv("./datasets/links.csv")
+    tmdb_links = tmdb_links[tmdb_links["movieId"].isin(movie_ids)]
+    # print(tmdb_links)
+    return tmdb_links["tmdbId"]
+
 def get_movies_from_cosine_similarities(all_cosine_similarities, target_user_id : int):
     ratings = pd.read_csv("./datasets/ratings.csv")
     movies = pd.read_csv("./datasets/movies.csv")
@@ -9,10 +15,10 @@ def get_movies_from_cosine_similarities(all_cosine_similarities, target_user_id 
     index = 0
     all_curated_movies_ratings = None
     seen = set()
-    while index < all_cosine_similarities.size and index < 3:
+    while index < all_cosine_similarities.size and index < 5:
         user_id = all_cosine_similarities.iloc[index]["id"]
         # print(f"cos : {user['Cosine Similarity']}")
-        
+
         user_movies = ratings.loc[target_user_id]
         movies_from_closest_user = ratings.loc[user_id]
         movies_from_closest_user = movies_from_closest_user.dropna()
@@ -31,13 +37,10 @@ def get_movies_from_cosine_similarities(all_cosine_similarities, target_user_id 
     all_curated_movies_ratings = all_curated_movies_ratings.sort_values(ascending=False).index
     # print(all_curated_movies_ratings)
     all_curated_movies = movies.set_index("movieId").loc[all_curated_movies_ratings].reset_index()
-    print(all_curated_movies)
-    return
+    # print(all_curated_movies)
+    return return_tmdb(all_curated_movies["movieId"])
 
-def main():
-    argv = sys.argv
-    # print(argv)
-    target_user_id = int(argv[1])
+def start_algo(target_user_id: int):
     ratings = pd.read_csv("./datasets/ratings.csv")
     ratings = ratings.pivot(
         index="userId",
@@ -65,7 +68,15 @@ def main():
 
     all_cosine_similarities = pd.DataFrame(all_cosine_similarities, columns=["id", "Cosine Similarity"])
     sorted = all_cosine_similarities.sort_values(by="Cosine Similarity", ascending=False).reset_index(drop=True)
-    get_movies_from_cosine_similarities(sorted, target_user_id)
+    return get_movies_from_cosine_similarities(sorted, target_user_id)
+
+def main():
+    argv = sys.argv
+    # print(argv)
+    target_user_id = int(argv[1])
+    start_algo(target_user_id)
+    
+    
     
         
 
