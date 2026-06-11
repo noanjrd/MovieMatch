@@ -1,6 +1,6 @@
 from fastapi import FastAPI,  Request
 from fastapi.middleware.cors import CORSMiddleware
-from train_model import start_algo
+from algorithm import start_algo, get_movies_seen_by_user
 import requests
 import os
 from dotenv import load_dotenv
@@ -25,9 +25,7 @@ app.add_middleware(
 )
 
 load_dotenv()
-
 API_KEY = os.getenv("TMDB_API_KEY")
-print(API_KEY)
 
 @app.get("/")
 def root():
@@ -36,26 +34,30 @@ def root():
 @app.get("/users/{id}")
 def get(id : int):
     print(id)
-    movies = list(start_algo(id))
-    movies_info = []
+    movies_liked_by_user = get_movies_seen_by_user(id)
+    if movies_liked_by_user is None:
+        return {"success" : False, "message" : "User not found, try with a smaller id"}
+    movies_recommended = list(start_algo(id))
+    movies_info = [[],[]]
+    # print("here :", movies_recommended)
     headers = {"Authorization": f"Bearer {API_KEY}"}
-    for id in movies:
-        url = f"https://api.themoviedb.org/3/movie/{id}"
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            data = response.json()
-            print(data)
-            genres = [el["name"] for el in data["genres"]]
-            movies_info.append({
-                "title": data["title"],
-                "poster_link" : "https://image.tmdb.org/t/p/w500" +  data["poster_path"],
-                "genres" : genres
-            })
-    else:
+    all_movies = [movies_recommended, movies_liked_by_user]
+    for index, movies in enumerate(all_movies):
+        for id in movies:
+            url = f"https://api.themoviedb.org/3/movie/{id}"
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                # print(data)
+                genres = [el["name"] for el in data["genres"]]
+                movies_info[index].append({
+                    "title": data["title"],
+                    "poster_link" : "https://image.tmdb.org/t/p/w500" +  data["poster_path"],
+                    "genres" : genres
+                })
+            else:
                 print(f"Erreur TMDB pour ID : {response.status_code}")
 
-        
-
     print(movies_info)
-    return {"movies" : movies_info}
+    return {"success" : True, "movies_recommended" : movies_info[0], "movies_liked_by_user" : movies_info[1]}
 
