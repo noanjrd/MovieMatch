@@ -58,6 +58,6 @@ def get(id : int):
             else:
                 print(f"Erreur TMDB pour ID : {response.status_code}")
 
-    print(movies_info)
+    # print(movies_info)
     return {"success" : True, "movies_recommended" : movies_info[0], "movies_liked_by_user" : movies_info[1]}
 

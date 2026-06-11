@@ -27,7 +27,7 @@ def get_movies_from_cosine_similarities(ratings :pd.DataFrame, all_cosine_simila
     movies_seen_by_user = ratings.loc[target_user_id].dropna().index
     seen = set(movies_seen_by_user)
     index = 0
-    while index < all_cosine_similarities.size and (len(seen) - len(movies_seen_by_user)) < 21 :
+    while index < all_cosine_similarities.size and (len(seen) - len(movies_seen_by_user)) < 50 :
         user_id = all_cosine_similarities.iloc[index]["id"]
         movies_from_closest_user = ratings.loc[user_id]
         movies_from_closest_user = movies_from_closest_user.dropna()
@@ -42,7 +42,7 @@ def get_movies_from_cosine_similarities(ratings :pd.DataFrame, all_cosine_simila
 
     all_curated_movies_ratings = all_curated_movies_ratings.sort_values(ascending=False).index
     all_curated_movies = movies.set_index("movieId").loc[all_curated_movies_ratings].reset_index()
-    return return_tmdb_ids(all_curated_movies["movieId"])
+    return return_tmdb_ids(all_curated_movies["movieId"][:20])
 
 def start_algo(target_user_id: int):
     try:
@@ -55,6 +55,7 @@ def start_algo(target_user_id: int):
         row_of_user = ratings.loc[target_user_id]
         seen_movies_of_user = row_of_user.dropna().index
         seen_movies_ratings = ratings[seen_movies_of_user]
+        seen_movies_ratings = seen_movies_ratings.sub(seen_movies_ratings.mean(axis=1), axis=0) # Centering values
         target_user_seen_movies = seen_movies_ratings.loc[target_user_id]
 
         #  Getting all the cosine similarities
@@ -63,7 +64,7 @@ def start_algo(target_user_id: int):
             if id == target_user_id:
                 continue
             common_movies_bool = (row.notna() & target_user_seen_movies.notna()).to_numpy()
-            if common_movies_bool.sum() < 10:
+            if common_movies_bool.sum() < 15:
                 continue
             dot_res = np.dot(row[common_movies_bool], target_user_seen_movies[common_movies_bool])
             length_vector_user = np.linalg.norm(row[common_movies_bool])
