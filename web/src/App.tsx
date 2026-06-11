@@ -2,14 +2,17 @@ import { useState } from 'react'
 import './App.css'
 
 const Genres = {
+  Drama: 'Drama',
   Comedy: 'Comedy',
+  Thriller: 'Thriller',
+  Family: 'Family',
   Adventure: 'Adventure',
   Fantasy: 'Fantasy',
-  Family: 'Family',
   Science_Fiction: 'Science Fiction',
-  Thriller: 'Thriller',
   Crime: 'Crime',
-  Romance: "Romance"
+  Romance: "Romance",
+  History : 'History',
+  Mystery : 'Mystery',
 } as const;
 
 interface Movie {
@@ -45,11 +48,13 @@ function App() {
   const [moviesLikedByUser, setMoviesLikedByUser] = useState<Movie[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [currentUserId, setCurrentUserId] = useState<null | number>(null)
 
   const fetchRecommendations = async () => {
     if (!input || Number(input) === 0) return;
     setLoading(true)
     setError(null)
+    const userId = Number(input)
     try {
       const url = "http://127.0.0.1:8000/users/" + input
       const answer = await fetch(url)
@@ -57,6 +62,7 @@ function App() {
       if (data.success) {
         setMoviesRecommended(data.movies_recommended || [])
         setMoviesLikedByUser(data.movies_liked_by_user || [])
+        setCurrentUserId(userId)
       }
       else {
         setError(data.message || "An error occurred while fetching recommendations.")
@@ -113,7 +119,7 @@ function App() {
           <section className="animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="flex items-center gap-2 mb-6">
               <span className="w-1.5 h-6  bg-purple-500 rounded-full"></span>
-              <h3 className="text-xl  font-bold">Movies User {input} liked</h3>
+              <h3 className="text-xl  font-bold">Some movies user {currentUserId} has liked</h3>
             </div>
             <div className="flex gap-4 overflow-x-auto pb-4  ">
               {moviesLikedByUser.map((movie, idx) => (
@@ -121,6 +127,13 @@ function App() {
               ))}
             </div>
           </section>
+        )}
+
+        {/* Title for Recommendations */}
+        {moviesRecommended.length > 0 && (
+          <div className="pt-8">
+            <h2 className="text-2xl font-bold">What user {currentUserId} might like based on the algorithm</h2>
+          </div>
         )}
 
         {/* Recommendations Section */}
