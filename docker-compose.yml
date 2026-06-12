@@ -1,0 +1,33 @@
+services:
+  server:
+    build: 
+      context: .
+      dockerfile: ./server/Dockerfile
+      args:
+        - TMDB_API_KEY=${TMDB_API_KEY}
+        - FRONT_URL=${FRONT_URL}
+    ports:
+      - "8000:8000"
+    environment:
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - FRONT_URL=${FRONT_URL}
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+      
+  web:
+    build: 
+      context: .
+      dockerfile: ./web/Dockerfile
+      args:
+        - VITE_BACK_URL=${VITE_BACK_URL}
+    environment:
+      - VITE_BACK_URL=${VITE_BACK_URL}
+    ports:
+      - "8200:8200"
+    restart: always #redemarre le container apres l arret du serveur ou un erreur
+    depends_on:
+      - server

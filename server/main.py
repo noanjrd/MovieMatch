@@ -7,12 +7,14 @@ from dotenv import load_dotenv
 
 
 app = FastAPI()
+load_dotenv()
+API_KEY = os.getenv("TMDB_API_KEY")
+ORIGIN = os.getenv("FRONT_URL")
 
+print(ORIGIN)
 
 origins = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173", # Ajoutez cette ligne
+    ORIGIN
 ]
 
 app.add_middleware(
@@ -24,8 +26,6 @@ app.add_middleware(
 
 )
 
-load_dotenv()
-API_KEY = os.getenv("TMDB_API_KEY")
 
 @app.get("/")
 def root():

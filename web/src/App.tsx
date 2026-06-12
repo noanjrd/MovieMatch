@@ -56,7 +56,8 @@ function App() {
     setError(null)
     const userId = Number(input)
     try {
-      const url = "http://127.0.0.1:8000/users/" + input
+      const backUrl = import.meta.env.VITE_BACK_URL;
+      const url = backUrl  + "/users/" + input
       const answer = await fetch(url)
       const data = await answer.json()
       if (data.success) {
@@ -132,7 +133,7 @@ function App() {
         {/* Title for Recommendations */}
         {moviesRecommended.length > 0 && (
           <div className="pt-8">
-            <h2 className="text-2xl font-bold">What user {currentUserId} might like based on the algorithm</h2>
+            <h2 className="text-2xl font-bold">What the algorithm thinks user {currentUserId} might like</h2>
           </div>
         )}
 
@@ -166,7 +167,7 @@ function App() {
             <div className="text-6xl mb-4">🍿</div>
             <h2 className="text-xl font-medium">No results yet</h2>
             <p className="text-gray-400 max-w-sm">Enter a user ID above to see personalized movie 
-              recommendations based on my algorithm.</p>
+              recommendations based on the algorithm.</p>
           </div>
         )}
       </main>

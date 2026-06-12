@@ -27,7 +27,7 @@ def get_movies_from_cosine_similarities(ratings :pd.DataFrame, all_cosine_simila
     movies_seen_by_user = ratings.loc[target_user_id].dropna().index
     seen = set(movies_seen_by_user)
     index = 0
-    while index < all_cosine_similarities.size and (len(seen) - len(movies_seen_by_user)) < 50 :
+    while index < all_cosine_similarities.size and (len(seen) - len(movies_seen_by_user)) <= 20 :
         user_id = all_cosine_similarities.iloc[index]["id"]
         movies_from_closest_user = ratings.loc[user_id]
         movies_from_closest_user = movies_from_closest_user.dropna()
