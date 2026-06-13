@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import './App.css'
+import githubIcon from "./assets/github_icon.svg"
+
 
 const Genres = {
   Drama: 'Drama',
@@ -56,7 +58,7 @@ function App() {
     setError(null)
     const userId = Number(input)
     try {
-      const backUrl = import.meta.env.VITE_BACK_URL;
+      const backUrl = import.meta.env.VITE_BACK_URL || "";
       const url = backUrl  + "/users/" + input
       const answer = await fetch(url)
       const data = await answer.json()
@@ -88,11 +90,17 @@ function App() {
           </div>
         )}
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
 
             <h1 className="text-2xl font-black bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent">
               MovieMatch
             </h1>
+            <a href='https://github.com/noanjrd/MovieMatch'>
+            <img
+              src={githubIcon}
+              alt="GitHub"
+              className="h-8 w-8 mt-1 hover:opacity-70"
+            /></a>
           </div>
 
           <div className="flex w-full md:w-auto items-center gap-2 bg-gray-900/50 p-1.5 rounded-full border border-gray-800 focus-within:border-purple-500/50 transition-all">
