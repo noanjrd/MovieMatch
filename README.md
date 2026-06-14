@@ -2,15 +2,15 @@
 
 MovieMatch is a full-stack movie recommendation web application built to explore and understand how modern recommendation systems are designed and optimized.
 
-> **Project Scope Disclaimer**: The algorithmic backend, data parsing pipeline, API orchestration, and Docker configurations were custom-coded entirely by me from scratch. The React frontend was integrated from an existing template/boilerplate to serve purely as a visual dashboard for displaying the computed recommendations.
+> **Project Scope Disclaimer**: The algorithmic backend, data parsing pipeline, API orchestration, and Docker configurations were custom-coded entirely by me from scratch. The React frontend was crafted with the assistance of AI to serve purely as a visual dashboard for presenting the backend's computed recommendations.
 
 
 ## System Architecture
 
 The application is split into two layers:
 
-1. **Backend & Recommendation Engine (Custom-Coded)**: A high-performance, asynchronous FastAPI system running on Python. It handles mathematical computations via `pandas` and `numpy`, data modeling, and asynchronous external network calls.
-2. **Frontend UI (Integrated Template)**: A single-page dashboard built with React, Vite, TypeScript, and Tailwind CSS to group recommendations dynamically by genre.
+1. **Backend & Recommendation Engine**: A high-performance, asynchronous FastAPI system running on Python. It handles mathematical computations via `pandas` and `numpy`, data modeling, and asynchronous external network calls.
+2. **Frontend UI**: A single-page dashboard built with React, Vite, TypeScript, and Tailwind CSS to group recommendations dynamically by genre.
 
 
 ## How the Recommendation Algorithm Works
@@ -19,7 +19,7 @@ The core of my backend work relies on an item-rating **Collaborative Filtering**
 
 ### Step 1: Pivoting and Vector Alignment
 
-The backend loads raw data from MovieLens-style structures (`ratings.csv`, `movies.csv`, `links.csv`) and shapes them into a User-Item pivot matrix, where row indexes represent unique `userId`s, columns track `movieId`s, and coordinates reflect individual rating integers.
+The backend loads raw data from [MovieLens](https://grouplens.org/datasets/movielens) (`ratings.csv`, `movies.csv`, `links.csv`) and shapes them into a User-Item pivot matrix, where row indexes represent unique `userId`s, columns track `movieId`s, and coordinates reflect individual rating integers.
 
 ### Step 2: Mean-Centering (Normalizing Preference Scaling)
 
