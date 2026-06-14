@@ -103,4 +103,8 @@ python algorithm.py [USER_ID]
 ### Web Dashboard (Frontend Template)
 
 ![MovieMatch Dashboard](images/preview_1.png)
+
+<br>
+
+
 ![MovieMatch Dashboard 2](images/preview_2.png)
