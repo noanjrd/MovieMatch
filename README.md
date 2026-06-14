@@ -72,8 +72,7 @@ TMDB_API_KEY=your_tmdb_bearer_token_here
 
 # Network Mappings
 FRONT_URL=http://localhost:8200
-VITE_BACK_URL=http://localhost:8000
-
+VITE_BACK_URL=http://127.0.0.1:8000
 ```
 
 ### Deployment
@@ -82,11 +81,10 @@ I configured Docker structures to spin up the independent components concurrentl
 
 ```bash
 docker compose up --build -d
-
 ```
 
-* ⚙️ **FastAPI Backend Service**: Interoperable at [http://localhost:8000](http://localhost:8000)
-* 🖥️ **Web UI Viewport Template**: Displaying metrics at [http://localhost:8200](http://localhost:8200)
+* **FastAPI Backend Service**: Interoperable at [http://localhost:8000](http://localhost:8000)
+* **Web UI Viewport Template**: Displaying metrics at [http://localhost:8200](http://localhost:8200)
 
 ### Isolated Algorithm Execution
 
@@ -96,7 +94,13 @@ To run and debug my backend logic directly via terminal streams without launchin
 cd server
 pip install -r ../requirements.txt
 python algorithm.py [USER_ID]
-
 ```
 
 *(Example: `python algorithm.py 5` generates standard raw stdout recommendation dictionaries for user ID 5)*
+
+## Screenshots
+
+### Web Dashboard (Frontend Template)
+
+![MovieMatch Dashboard](images/preview_1.png)
+![MovieMatch Dashboard 2](images/preview_2.png)
