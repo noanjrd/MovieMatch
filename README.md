@@ -46,15 +46,6 @@ $$\text{Similarity}(A, B) = \frac{A \cdot B}{\|A\| \|B\|}$$
 3. Up to 25 unique indices are mapped across the dataset indices via `links.csv` to extract standard global IDs.
 
 
-## Parallel Metadata Fetching
-
-To maximize backend efficiency, I built an asynchronous orchestration layer using `httpx` and `asyncio.gather` inside FastAPI:
-
-* Once the similarity engine resolves the 25 recommended dataset IDs, the backend maps them to TMDB-compliant parameters.
-* Instead of sequentially querying metadata, it spins up parallel async threads to fetch production text, poster paths, and movie genre data from TMDB endpoints.
-* The organized dataset payload is then consolidated and pushed downstream to the UI.
-
-
 ## Getting Started
 
 ### Prerequisites
